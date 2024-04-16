@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './questao.dart';
-import './resposta.dart';
+import './questionario.dart';
+import './resultado.dart';
 
 void main() => runApp(const PerguntaApp());
 
@@ -10,15 +10,30 @@ class _PerguntaAppState extends State<PerguntaApp> {
   final _perguntas = const [
     {
       'texto': 'Qual é a sua cor favorita?',
-      'respostas': ['azul', 'amarelo', 'vermelho', 'verde']
+      'respostas': [
+        {'texto': 'azul', 'nota': 10},
+        {'texto': 'amarelo', 'nota': 20},
+        {'texto': 'vermelho', 'nota': 30},
+        {'texto': 'verde', 'nota': 40},
+      ],
     },
     {
       'texto': 'Qual é o seu animal favorito?',
-      'respostas': ['cachorro', 'gato', 'papagaio', 'rato']
+      'respostas': [
+        {'texto': 'cachorro', 'nota': 10},
+        {'texto': 'gato', 'nota': 20},
+        {'texto': 'papagaio', 'nota': 30},
+        {'texto': 'rato', 'nota': 40},
+      ]
     },
     {
       'texto': 'Qual é o seu dia da semana favorito?',
-      'respostas': ['segunda', 'quarta', 'sexta', 'domingo']
+      'respostas': [
+        {'texto' : 'segunda', 'nota' : 20},
+        {'texto' : 'quarta', 'nota' : 30},
+        {'texto' : 'sexta', 'nota' : 40},
+        {'texto' : 'domingo', 'nota' : 50},
+      ]
     },
   ];
 
@@ -34,31 +49,17 @@ class _PerguntaAppState extends State<PerguntaApp> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> respostas = temPSelect
-        ? _perguntas[_perguntaSelecionada]['respostas'] as List<String>
-        : [];
-    // for (String textoResp in respostas) {
-    //   widgets.add(Resposta(textoResp, _responder));
-    // }
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Perguntas'),
         ),
         body: temPSelect
-            ? Column(
-                children: [
-                  Questao(_perguntas[_perguntaSelecionada]['texto'].toString()),
-                  ...respostas.map((t) => Resposta(t, _responder)),
-                ],
-              )
-            : Center(
-                child: Text(
-                  'Vai se foder',
-                  style: TextStyle(fontSize: 28),
-                ),
-              ),
+            ? Questionario(
+                perguntas: _perguntas,
+                perguntaSelecionada: _perguntaSelecionada,
+                quandoResponder: _responder)
+            : Resultado(),
       ),
     );
   }
