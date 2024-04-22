@@ -6,44 +6,54 @@ void main() => runApp(const PerguntaApp());
 
 class _PerguntaAppState extends State<PerguntaApp> {
   var _perguntaSelecionada = 0;
-
+  var _pontuacaoTotal = 0;
   final _perguntas = const [
     {
       'texto': 'Qual é a sua cor favorita?',
       'respostas': [
-        {'texto': 'azul', 'nota': 10},
-        {'texto': 'amarelo', 'nota': 20},
-        {'texto': 'vermelho', 'nota': 30},
-        {'texto': 'verde', 'nota': 40},
+        {'texto': 'Preto', 'pontuacao': 10},
+        {'texto': 'Vermelho', 'pontuacao': 5},
+        {'texto': 'Verde', 'pontuacao': 3},
+        {'texto': 'Branco', 'pontuacao': 1},
       ],
     },
     {
       'texto': 'Qual é o seu animal favorito?',
       'respostas': [
-        {'texto': 'cachorro', 'nota': 10},
-        {'texto': 'gato', 'nota': 20},
-        {'texto': 'papagaio', 'nota': 30},
-        {'texto': 'rato', 'nota': 40},
-      ]
+        {'texto': 'Coelho', 'pontuacao': 10},
+        {'texto': 'Cobra', 'pontuacao': 5},
+        {'texto': 'Elefante', 'pontuacao': 3},
+        {'texto': 'Leão', 'pontuacao': 1},
+      ],
     },
     {
-      'texto': 'Qual é o seu dia da semana favorito?',
+      'texto': 'Qual é o seu instrutor favorito?',
       'respostas': [
-        {'texto' : 'segunda', 'nota' : 20},
-        {'texto' : 'quarta', 'nota' : 30},
-        {'texto' : 'sexta', 'nota' : 40},
-        {'texto' : 'domingo', 'nota' : 50},
-      ]
-    },
+        {'texto': 'Leo', 'pontuacao': 10},
+        {'texto': 'Maria', 'pontuacao': 5},
+        {'texto': 'João', 'pontuacao': 3},
+        {'texto': 'Pedro', 'pontuacao': 1},
+      ],
+    }
   ];
 
-  void _responder() {
+  void _responder(int pontuacao) {
+    if (temPerguntaSelecionada) {
+      setState(() {
+        _perguntaSelecionada++;
+        _pontuacaoTotal += pontuacao;
+      });
+    }
+  }
+
+  void _reiniciarQuestionario() {
     setState(() {
-      _perguntaSelecionada++;
+      _perguntaSelecionada = 0;
+      _pontuacaoTotal = 0;
     });
   }
 
-  bool get temPSelect {
+  bool get temPerguntaSelecionada {
     return _perguntaSelecionada < _perguntas.length;
   }
 
@@ -54,12 +64,13 @@ class _PerguntaAppState extends State<PerguntaApp> {
         appBar: AppBar(
           title: const Text('Perguntas'),
         ),
-        body: temPSelect
+        body: temPerguntaSelecionada
             ? Questionario(
                 perguntas: _perguntas,
                 perguntaSelecionada: _perguntaSelecionada,
-                quandoResponder: _responder)
-            : Resultado(),
+                quandoResponder: _responder,
+              )
+            : Resultado(_pontuacaoTotal, _reiniciarQuestionario),
       ),
     );
   }
